@@ -14,3 +14,17 @@ Feature: User Login
     When Pengguna menginput username "standard_user"
     And Pengguna menekan tombol login
     Then Login gagal, current screen tetap berada pada halaman login, dan sistem menampilkan pesan error "You need Password!"
+
+  Scenario: Login dengan username yang valid dan password tidak valid
+    Given Pengguna berhasil mengakses website Swaglabs pada browser
+    And Pengguna berada pada halaman login
+    When Pengguna menginput username "standard_user" dan password "test123456"
+    And Pengguna menekan tombol login
+    Then Login gagal, current screen tetap berada pada halaman login, dan sistem menampilkan pesan error "Username and password do not match any user in this service !"
+
+  Scenario: Login hanya dengan mengisi password
+    Given Pengguna berhasil mengakses website Swaglabs pada browser
+    And Pengguna berada pada halaman login
+    When Pengguna menginput password "secret_sauce"
+    And Pengguna menekan tombol login
+    Then Login gagal, current screen tetap berada pada halaman login, dan sistem menampilkan pesan error "You need Username!"
