@@ -4,6 +4,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.openqa.selenium.WebDriver;
@@ -21,13 +22,17 @@ public class LogoutSteps {
         configReader = new ConfigReader();
     }
 
-    @Given("the user is logged in with username {string} and password {string}")
-    public void the_user_is_logged_in_with_username_and_password(String username, String password) {
-        // Assuming user is already logged in, so we just need to open the website
+    @Given("Pengguna sudah berhasil mengakses website Swaglabs pada browser")
+    public void access_url() {
+        String url = "https://www.saucedemo.com";
         System.setProperty("webdriver.chrome.driver", configReader.getProperty("webdriver.chrome.driver"));
         driver = new ChromeDriver();
         seleniumHelper = new SeleniumHelper(driver);
-        driver.get("https://www.saucedemo.com");
+        driver.get(url);
+    }
+
+    @Given("Pengguna berhasil melakukan login dengan username {string} dan password {string}")
+    public void the_user_is_logged_in_with_username_and_password(String username, String password) {
 
         // Perform login if needed
         if (!seleniumHelper.isElementDisplayedById("login-button")) {
@@ -39,6 +44,20 @@ public class LogoutSteps {
         seleniumHelper.setInputByName("user-name", username);
         seleniumHelper.setInputByName("password", password);
         seleniumHelper.clickButtonById("login-button");
+    }
+
+    @Given("Pengguna berada pada halaman dashboard")
+    public void checkIsStillInLoginPage() {
+        String expectedUrl = "https://www.saucedemo.com/inventory.html";
+        String currentUrl = driver.getCurrentUrl();
+        assertEquals(expectedUrl, currentUrl);
+    }
+
+    @When("Pengguna menekan tombol logout")
+    public void clickLogoutButton() {
+        seleniumHelper.clickElementById("react-burger-menu-btn");
+        seleniumHelper.clickElementById("logout_sidebar_link");
+
     }
 
     @When("click element {string}")
@@ -56,8 +75,9 @@ public class LogoutSteps {
         driver.get(url);
     }
 
-    @Then("check if {string} is displayed")
-    public void check_if_login_button_is_displayed(String elementId) {
+    @Then("Logout berhasil, sistem menampilkan halaman login")
+    public void check_if_login_button_is_displayed() {
+        String elementId = "login-button";
         try {
             assertTrue(seleniumHelper.isElementDisplayedById(elementId));
         } finally {

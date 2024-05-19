@@ -31,12 +31,12 @@ OS: Windows 11 10.0 amd64
 ```gherkin
 Feature: User Login
 
-    Scenario: {Scenario Name}
-        Given access url "https://www.saucedemo.com"
-        And set username {username}
-        And set password {password}
-        When press login button
-        Then check url "https://www.saucedemo.com/inventory.html"
+  Scenario: {Scenario Name}
+    Given Pengguna berhasil mengakses website Swaglabs pada browser
+    And Pengguna berada pada halaman login
+    When Pengguna menginput username {Username} dan password {Password}
+    And Pengguna menekan tombol login
+    Then Login berhasil dan sistem menampilkan halaman dashboard yang berisi daftar katalog produk
 ```
 
 **format for login failed**
@@ -44,12 +44,25 @@ Feature: User Login
 ```gherkin
 Feature: User Login
 
-    Scenario: {Scenario Name}
-        Given access url "https://www.saucedemo.com"
-        And set username {username}
-        And set password {password}
-        When press login button
-        Then check error message {expectedMessageOutput}
+  Scenario: {Scenario Name}
+    Given Pengguna berhasil mengakses website Swaglabs pada browser
+    And Pengguna berada pada halaman login
+    When Pengguna menginput username {Username}
+    And Pengguna menekan tombol login
+    Then Login gagal, current screen tetap berada pada halaman login, dan sistem menampilkan pesan error {expected Error Message}
+```
+
+**format for logout success**
+
+````gherkin
+Feature: User Logout
+
+    Scenario: Logout Sukses
+        Given Pengguna sudah berhasil mengakses website Swaglabs pada browser
+        And Pengguna berhasil melakukan login dengan username {Username} dan password {Password}
+        And Pengguna berada pada halaman dashboard
+        When Pengguna menekan tombol logout
+        Then Logout berhasil, sistem menampilkan halaman login
 ```
 
 - run test by execute command `./gradlew test`
@@ -62,3 +75,4 @@ use command `./gradlew test --info` for read detail output from cucumber
 ## Report Directory
 
 report created by gradle saved in `build\reports\tests\test\index.html`
+````
